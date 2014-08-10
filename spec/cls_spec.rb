@@ -9,6 +9,12 @@ class NamePresenter
   let(:increment) { @value ||= 0; @value += 1 }
 end
 
+class ProfilePresenter
+  extend Cls
+  attr_reader :name, :age
+  takes(:name, required: [:age])
+end
+
 describe Cls do
   describe "initializers" do
     it "takes initializer arguments" do
@@ -24,6 +30,18 @@ describe Cls do
     it "errors when there are too few initializer arguments" do
       expect do
         NamePresenter.new
+      end.to raise_error(ArgumentError)
+    end
+  end
+
+  describe "initializers with keyword arguments" do
+    it "takes required keyword arguments" do
+      ProfilePresenter.new("Bob", age: 30).age.should == 30
+    end
+
+    it "errors when required keyword arguments are not passed" do
+      expect do
+        ProfilePresenter.new("Bob")
       end.to raise_error(ArgumentError)
     end
   end
