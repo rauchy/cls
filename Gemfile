@@ -1,8 +1,4 @@
-source :rubygems
-
-group :development do
-  gem "rspec"
-end
+source 'https://rubygems.org'
 
 gemspec
 
