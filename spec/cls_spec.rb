@@ -11,8 +11,11 @@ end
 
 class ProfilePresenter
   extend Cls
-  attr_reader :name, :age
+  attr_reader :name, :age, :followers
   takes(:name, required: [:age])
+
+  takes :name, required: [:age],
+               optional: { followers: [] }
 end
 
 describe Cls do
@@ -37,6 +40,15 @@ describe Cls do
   describe "initializers with keyword arguments" do
     it "takes required keyword arguments" do
       ProfilePresenter.new("Bob", age: 30).age.should == 30
+    end
+
+    it "sets default value for optional keyword arguments" do
+      ProfilePresenter.new("Bob", age: 30).followers.should == []
+    end
+
+    it "takes optional keyword arguments" do
+      follower = NamePresenter.new("Dan")
+      ProfilePresenter.new("Bob", age: 30, followers: [follower]).followers.should == [follower]
     end
 
     it "errors when required keyword arguments are not passed" do
